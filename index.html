@@ -1,0 +1,673 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>RubyGems on the watch</title>
+
+    <link rel="stylesheet" type="text/css" href="MyFontsWebfontsKit.css">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme.css" id="theme">
+    <link rel="stylesheet" href="css/custom.css" id="theme">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-background-repeat="repeat">
+          <img src="img/boom.png" style="border: 1px solid #bcbec0; padding: 10px; width: 50%; background: none;"/>
+          <h4>RubyGems on the watch</h4>
+        </section>
+
+        <section>
+          <h2>$ whoami</h2>
+
+          <p>
+            <span style="color: #00C7BA">Maciej Mensfeld</span>
+          </p>
+
+            <ul style="font-size: 90%;">
+              <li>
+                Creator of Mend Supply Chain Defender
+              </li>
+              <li>
+                Principal Architect at Mend
+              </li>
+              <li>
+                RubyGems Security Team member
+              </li>
+              <li>
+                OSS contributor (~16 years with Ruby)
+              </li>
+
+              <li>
+                Karafka creator (Ruby + Kafka)
+              </li>
+            </ul>
+        </section>
+
+        <section>
+          <img src="img/review-changes.png" style="border: 1px solid #bcbec0; padding: 10px; max-width: 70%"/>
+        </section>
+
+        <section>
+          <img src="img/review-changes2.png" style="border: 1px solid #bcbec0; padding: 10px; max-width: 70%"/>
+        </section>
+
+        <section>
+          <h4>today@rubygems.org</h4>
+
+          <img src="img/google.png" style="border: 1px solid #bcbec0; padding: 10px; max-width: 70%"/>
+        </section>
+
+        <section>
+          <h4>today@rubygems.org</h4>
+
+          <ul>
+            <li><span style="color: #00C7BA">YES</span> rubygems.org is <span style="color: #00C7BA">NOT</span> malicious,</li>
+            <li><span style="color: #00C7BA">YES</span> we know what Google/Chrome says</li>
+            <li><span style="color: #00C7BA">YES</span> we reported that</li>
+            <li><span style="color: #00C7BA">NO</span>, we cannot do more than that and we're waiting for Google to fix this</li>
+          </ul>
+        </section>
+
+        <section>
+          <h4>today@rubygems.org</h4>
+
+          <ul>
+            <li>RubyGems API <span style="color: #00C7BA">may</span> be affected</li>
+            <li>metasploit-payloads is <span style="color: #00C7BA">NOT</span> malicious</li>
+          </ul>
+        </section>
+
+
+
+
+        <section>
+          <h2>Agenda</h2>
+          <ul>
+            <li><span style="color: #00C7BA">OSS</span> Supply Chain</li>
+            <li>Recent RubyGems Critical Incidents</li>
+            <li>Countermeasures & mitigation</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>
+            What do I hope to leave you with
+          </h3>
+
+          <p>
+            <span style="font-size: 75%">
+              RubyGems security team does many things to make sure things operate as expected.
+            </span>
+          </p>
+
+          <p>
+            <span style="font-size: 75%">
+              In many ways we lead the way.
+            </span>
+          </p>
+
+          <p>
+            <span style="font-size: 75%">
+              OSS Security in the end is <span style="color: #00C7BA">your</span> responsibility.
+            </span>
+          </p>
+        </section>
+
+        <section>
+          <h2>Disclaimers</h2>
+          <h6>I'm just a <span style="color: #00C7BA">small</span> part of the RubyGems team</h6>
+          <h6>Today's presentation is mostly about my work for the RubyGems ecosystem</h6>
+        </section>
+
+        <section>
+          <img src="img/flows.png" style="border: 1px solid #bcbec0; padding: 10px; max-width: 40%"/>
+          <h3>
+            <span style="color: #00C7BA">OSS</span> Supply Chain
+          </h3>
+        </section>
+
+        <section>
+          <img src="img/oss-flow.svg" style="border: none; box-shadow: 0 0 0 0 #fff; width: 80%; background: none;"/>
+          <h3>
+            How OSS distribution works
+          </h3>
+        </section>
+
+        <section>
+          <img src="img/oss-flow2.svg" style="border: none; box-shadow: 0 0 0 0 #fff; width: 100%; background: none;"/>
+          <h3>
+            How <span style="color: #00C7BA">OSS</span> distribution works (complex case)
+          </h3>
+        </section>
+
+        <section>
+          <img src="img/rubygems.png" style="border: none; box-shadow: 0 0 0 0 #fff; width: 25%; background: none;"/>
+          <p>
+            <span style="color: #00C7BA">RubyGems</span> is the primary package registry for the Ruby community.
+          </p>
+        </section>
+
+        <section>
+          <img src="img/rubygems.png" style="border: none; box-shadow: 0 0 0 0 #fff; width: 15%; background: none;"/>
+
+          <p>
+            <ul style="font-size: 90%">
+              <li>Over <span style="color: #00C7BA">176k</span> active packages</li>
+              <li><span style="color: #00C7BA">132 billion</span> downloads</li>
+              <li><span style="color: #00C7BA">1</span> release every <span style="color: #00C7BA">3</span> minutes</li>
+              <li>Over <span style="color: #00C7BA">433 mln</span> lines of content monthly (162 lines per second)</li>
+              <li>Over <span style="color: #00C7BA">7.5 mln</span> lines of changes monthly</li>
+            </ul>
+          </p>
+        </section>
+
+        <section>
+            <a href="https://asciinema.org/a/0AXXCMVA5lOSeOzJDBEI0ZOlR?speed=0.2&t=5" target="_blank">
+              https://asciinema.org/a/0AXXCMVA5lOSeOzJDBEI0ZOlR?speed=0.2&t=5
+            </a>
+        </section>
+
+
+        <section>
+          <img src="img/flows.png" style="border: 1px solid #bcbec0; padding: 10px; max-width: 40%"/>
+          <p>
+            <span style="color: #00C7BA">60%-80%</span> of an average app’s code base is comprised of open source
+          </p>
+        </section>
+
+        <section>
+          <h3><span style="color: #00C7BA">OSS</span> attacks origins</h3>
+
+          <ul style="font-size: 90%">
+            <li>Internal (made by legit owners of packages)</li>
+            <li>External (made by malicious actors)</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3><span style="color: #00C7BA">OSS</span> attacks targets</h3>
+
+          <ul style="font-size: 90%">
+            <li>Platform (exploits, bugs, edge-cases)</li>
+            <li>Gems/Users (packages)</li>
+          </ul>
+        </section>
+
+        <section>
+          <img src="img/flows.png" style="border: 1px solid #bcbec0; padding: 10px; max-width: 40%"/>
+
+          <h3>Recent RubyGems Critical Incidents</h3>
+        </section>
+
+        <section>
+          <h3>Platform exploitation</h3>
+          <h4>Severity: <span style="color: #00C7BA">Critical</span></h4>
+          <h5>Unauthorized Package Takeover</h5>
+          <p>
+            <small>CVE-2022-29176</small>
+          </p>
+        </section>
+
+        <section>
+          <h3>CVE-2022-29176</h3>
+          <p style="font-size: 80%;">
+          <pre><code data-trim>
+          find_by!(full_name: "#{rubygem.name}-#{slug}")
+          </code></pre>
+          </p>
+          <p style="font-size: 80%;">
+            A bug in RubyGems that allowed unauthorized actors to yank (remove) a package version without being its owner. 
+          </p>
+        </section>
+
+        <section>
+          <h3>CVE-2022-29176</h3>
+          </p>
+          <p style="font-size: 80%;">
+By removing all the versions, under certain circumstances the name could be available for a reuse. This means that we’ve got ourselves a great new package name available for use.
+          </p>
+        </section>
+
+        <section>
+          <small>CVE-2022-29176</small>
+          <h4>Packages immutability</h4>
+          <img src="img/immu.webp" style="border: 1px solid #bcbec0; padding: 10px; max-width: 100%"/>
+        </section>
+
+        <section>
+          <small>CVE-2022-29176</small>
+          <h4>Packages immutability</h4>
+          <p>
+            What is often missed here is that a single RubyGems version is unique only within the scope of the 
+            <span style="color: #00C7BA">platform</span>
+             on which it was released
+          </p>
+        </section>
+
+        <section>
+          <small>CVE-2022-29176</small>
+          <h4>Lockfile to the rescue</h4>
+          <img src="img/frozen.webp" style="border: 1px solid #bcbec0; padding: 10px; max-width: 75%"/>
+        </section>
+
+        <section>
+          <small>CVE-2022-29176</small>
+          <h4>Impact assessment</h4>
+          <img src="img/owners1.webp" style="border: 1px solid #bcbec0; padding: 10px; max-width: 70%"/>
+          <img src="img/owners2.webp" style="border: 1px solid #bcbec0; padding: 10px; max-width: 70%"/>
+        </section>
+
+        <section>
+          <small>CVE-2022-29176</small>
+          <h4>Impact assessment</h4>
+          <img src="img/states.webp" style="border: 1px solid #bcbec0; padding: 10px; max-width: 60%"/>
+        </section>
+
+        <section>
+          <small>CVE-2022-29176</small>
+          <h4>Impact assessment</h4>
+
+<pre><code data-trim>
+SELECT versions.package_id from versions
+  inner join (
+    SELECT "versions"."package_id", "versions"."number"
+    FROM "versions" WHERE  yanked_at is not null
+  ) yanked
+  on versions.package_id = yanked.package_id
+  AND versions.number = yanked.number
+  where versions.yanked_at is null
+</code></pre>
+        </section>
+
+        <section>
+          <small>CVE-2022-29176</small>
+          <h4>Impact assessment</h4>
+          <img src="img/funn4.png" style="border: 1px solid #bcbec0; padding: 10px; max-width: 60%"/>
+        </section>
+
+        <section>
+          <h3>Platform exploitation</h3>
+          <h4>Protecting against unknown</h4>
+
+          <p style="font-size: 80%">
+            To stay one step ahead of attackers, we need to focus on what they want to achieve, not how they want to do it.
+          </p>
+        </section>
+
+        <section>
+          <small>Platform exploitation</small>
+          <h4>End goal: packages infection</h4>
+
+          <p>
+            <ul>
+              <li>Packages tampering</li>
+              <li>Packages highjacking (ATOs)</li>
+            </ul>
+          </p>
+        </section>
+
+        <section>
+          <small>Platform exploitation</small>
+          <h4>Packages tampering</h4>
+          <img src="img/sha.png" style="border: 1px solid #bcbec0; padding: 10px; max-width: 60%"/>
+        </section>
+
+        <section>
+          <small>Platform exploitation</small>
+          <h4>Severity: <span style="color: #00C7BA">Critical</span></h4>
+          <h5>Unauthorized Takeover of New Gem Versions via Cache Poisoning </h5>
+          <p>
+            <small>CVE-2022-29218</small>
+          </p>
+        </section>
+
+        <section>
+          <small>CVE-2022-29218</small>
+          <h4>Impact assessment</h4>
+
+          <ul style="font-size: 80%">
+            <li>
+    Incomplete data structure validation within the metadata file that is being used to read gem data upon version release to trigger an error
+            </li>
+            <li>
+    Ordering mistake in the code that accepts gem uploads that would store the package version despite the release process being halted with an exception
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <small>CVE-2022-29218</small>
+          <h4>Impact assessment</h4>
+
+          <p>
+             Using the two issues together allowed the attacker to save “not yet released” versions in the RubyGems S3 bucket. 
+          </p>
+        </section>
+
+        <section>
+          <small>CVE-2022-29218</small>
+          <h4>Impact assessment</h4>
+          <img src="img/preex.png" style="border: 1px solid #bcbec0; padding: 10px; max-width: 60%"/>
+        </section>
+
+        <section>
+          <small>CVE-2022-29218</small>
+          <h4>Impact assessment</h4>
+          <img src="img/fun2.png" style="border: 1px solid #bcbec0; padding: 10px; max-width: 60%"/>
+        </section>
+
+        <section>
+          <small>CVE-2022-29218</small>
+          <h4>Impact assessment</h4>
+          <img src="img/fun3.png" style="border: 1px solid #bcbec0; padding: 10px; max-width: 60%"/>
+        </section>
+
+        <section>
+          <small>CVE-2022-29218</small>
+          <h4>Impact assessment</h4>
+
+          <p>
+            What about package versions immutability?
+          </p>
+        </section>
+
+        <section>
+          <small>CVE-2022-29218</small>
+          <h4>Impact assessment</h4>
+
+          <p>
+            What about Bundler checksum verification?
+          </p>
+        </section>
+
+        <section>
+          <small>CVE-2022-29218</small>
+          <h4>Impact assessment</h4>
+
+          <pre><code data-trim>
+bundle add bundler-integrity
+# And run this to verify integrity of your local installation
+bundle exec bundler-integrity
+# Export to correlate in scale
+bundle exec bundler-integrity export
+          </code></pre>
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <section>
+          <h3>Brandjacking</h3>
+
+          <blockquote style="font-size: 80%">
+            Brandjacking is an activity whereby someone acquires or otherwise assumes the online identity of another entity for the purposes of acquiring that person's or business's brand equity.
+          </blockquote>
+        </section>
+
+        <section>
+          <h3>Brandjacking</h3>
+
+          <p>
+            The idea is to leverage <span style="color: #00C7BA">inconsistent</span> naming, particularly by big brands with many packages, and users assumptions about naming conventions or to "<span style="color: #00C7BA">provide</span>" SKDs for platforms that do not provide them on their own.
+          </p>
+        </section>
+
+        <section>
+          <h3>Brandjacking</h3>
+
+          <p style="font-size: 80%;">
+            <code>github.com/googleapis/google-api-ruby-client</code>
+          </p>
+          <p style="font-size: 80%;">
+            does <span style="color: #00C7BA">not</span> mean, that the package will be named
+          </p>
+          <p style="font-size: 80%;">
+            <code>google-api-ruby-client</code>
+          </p>
+        </section>
+
+        <section>
+          <h3>Brandjacking</h3>
+
+          <p style="font-size: 80%;">
+            <code>github.com/aws/aws-sdk-ruby</code>
+          </p>
+          <p style="font-size: 80%;">
+            does <span style="color: #00C7BA">not</span> mean, that the package will be named
+          </p>
+          <p style="font-size: 80%;">
+            <code>aws-sdk-ruby</code>
+          </p>
+        </section>
+
+        <section>
+          <h3>Brandjacking</h3>
+
+          <p style="font-size: 80%;">
+            <code>github.com/azure/azure-sdk-for-js</code>
+          </p>
+          <p style="font-size: 80%;">
+            does <span style="color: #00C7BA">not</span> mean, that the package will be named
+          </p>
+          <p style="font-size: 80%;">
+            <code>azure-sdk-for-js</code>
+          </p>
+        </section>
+
+        <section>
+          <h4>Brandjacking</h4>
+
+          <p style="font-size: 80%;">
+            RubyGems provides APIs and data that you can query to get relevant informations about packages.
+          </p>
+
+          <p style="font-size: 80%;">
+            With that, you can easily generate list of popular packages that have a mismatch in between their Github/Gitlab name and their registry name.
+          </p>
+        </section>
+
+        <section>
+          <h4>Brandjacking</h4>
+
+          <p style="font-size: 80%;">
+            But there's more!
+          </p>
+
+          <p>
+            Even the way RubyGems builds new packages can help malicious actors!
+          </p>
+        </section>
+
+        <section>
+          <h4>Brandjacking</h4>
+
+          <pre><code data-trim>
+Install the gem and add to the application's Gemfile by executing:
+
+    $ bundle add <%= config[:name] %>
+
+If bundler is not being used to manage dependencies, install the gem by executing:
+
+    $ gem install <%= config[:name] %>
+          </code></pre>
+        </section>
+
+        <section>
+          <h4>Brandjacking</h4>
+
+          <img src="img/times.png" style="border: 1px solid #bcbec0; padding: 10px; max-width: 60%"/>
+        </section>
+
+        <section>
+          <h3>The risk is real</h3>
+
+          <p style="font-size: 80%;">
+            There are weeks with <span style="color: #00C7BA">several</span> packages that we have to remove.
+          </p>
+
+        </section>
+
+        <section>
+          <h4>Expired domains monitoring</h4>
+
+          <ul>
+            <li>People make mistakes</li>
+            <li>Their domains expire</li>
+            <li>But their RubyGems account don't!</li>
+          </ul>
+        </section>
+
+        <section>
+          <h4>Expired domains monitoring</h4>
+
+          <p>
+            RubyGems automatically locks domains close to expiration to prevent their malicious takeover.
+          </p>
+        </section>
+
+        <section>
+          <p>
+            Open Source is a “<span style="color: #00C7BA">great</span>” way into a company’s software supply chain
+          </p>
+          <p>
+            Essentially no company has the time to read every line of code in every package and update they use
+          </p>
+        </section>
+
+        <section>
+          <h3>Understanding the risks</h3>
+
+          <p>
+            Your software supply chain risks are inherited from your dependencies
+          </p>
+        </section>
+
+        <section>
+          <h3>Risks related to using OSS software</h3>
+
+          <p>
+            Getting access to production enviroment is <span style="color: #00C7BA">not</span> always the goal of the attacker.
+          </p>
+        </section>
+
+        <section>
+          <h3>
+            Underestimating OSS supply risks puts at risk your customers as well
+          </h3>
+
+          <pre><code data-trim>
+          req.write(
+            Buffer.from(JSON.stringify(process.env)).toString('base64')
+          );
+          </code></pre>
+        </section>
+
+        <section>
+          <p>
+            <span style="color: #00C7BA">Installing</span> packages is enough to make things bad for many of the ecosystems.
+          </p>
+        </section>
+
+        <section>
+          <h2>Possibilities are <span style="color: #00C7BA">endless</span></h2>
+
+          <p>
+            Because we <span style="color: #00C7BA">allow</span> changes in the already installed dependencies,
+            a malicious code can easily infect other libraries, while cleaning up itself.
+          </p>
+        </section>
+
+        <section>
+          <p>
+            There are <span style="color: #00C7BA">162 lines of changes</span> released to RubyGems every second.
+          </p>
+          <p>
+            There are <span style="color: #00C7BA">6 lines of additions</span> released to RubyGems every second.
+          </p>
+        </section>
+
+        <section>
+          <h3>Summary</h3>
+
+          <ul style="font-size: 80%;">
+            <li>Trust no one</li>
+            <li>Watch out for RubyGems announcements / CVEs</li>
+            <li>Update only when you're sure of the content</li>
+            <li>Track changes</li>
+            <li>Run CI in isolated stages</li>
+            <li>Take care of your whole SDLC</li>
+            <li>Use Mend 🙏</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Thank you</h3>
+
+          <p>
+            For more details, find me/us on Twitter:
+          </p>
+
+          <ul style="list-style: none">
+            <li>@<span style="color: #00C7BA">maciejmensfeld</span></li>
+            <li>@<span style="color: #00C7BA">mend_io</span></li>
+          </ul>
+        </section>
+      </div>
+
+      <div class='logo'>
+         <img src="img/logo.png" style="width: 10%;"/>
+      </div>
+
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info about config & dependencies:
+      // - https://github.com/hakimel/reveal.js#configuration
+      // - https://github.com/hakimel/reveal.js#dependencies
+      Reveal.initialize({
+        history: true,
+        dependencies: [
+          { src: 'plugin/markdown/marked.js' },
+          { src: 'plugin/markdown/markdown.js' },
+          { src: 'plugin/notes/notes.js', async: true },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+      });
+    </script>
+  </body>
+</html>
